@@ -359,8 +359,8 @@ import praw
 
 def get_first_comment_from_post(url):
     # Create a Reddit instance
-    reddit = praw.Reddit(client_id='YlKEE-XuC3JZ8suil445rw',
-                         client_secret='WueypZMnVZY7x1t6aA_u59blYuBMmA',
+    reddit = praw.Reddit(client_id='ID',
+                         client_secret='secret key',
                          user_agent='TextOnImage')
 
     # Extract the post ID from the URL
