@@ -314,6 +314,7 @@ def parse_reddit_argument(reddit_args):
 
 
 def extract_nouns(text):
+    # Extracts nouns from the given text using NLTK
     nouns = []
     tokens = nltk.word_tokenize(text)
     tagged_words = nltk.pos_tag(tokens)
@@ -323,30 +324,35 @@ def extract_nouns(text):
     return nouns
 
 def writeTitleIntoImage(filename):
+    # Opens the image file
     img = Image.open(filename)
+    img = img.resize((3840, 2160))  # Resize the image to 3840x2160 pixels
     draw = ImageDraw.Draw(img)
     textToWrite0 = filename
-    textToWrite00 = extract_nouns(textToWrite0)
-    textToWrite1 = ' '.join(textToWrite00)
+    textToWrite00 = extract_nouns(textToWrite0) # Saved as a list
+    textToWrite1 = ' '.join(textToWrite00) # Joined the list to make it string
     myFont = ImageFont.truetype('FreeMono.ttf', 55)
 
     pattern_order = ['x', 'OC', r'\.jpg', r'\.jpeg', r'[0-9]', r'\.png', r'\.webm', r'\.gifs']
-
+    # Removing words included on pattern_order
     for pattern in pattern_order:
         if re.search(pattern, textToWrite1):
             textToWrite2 = re.sub(pattern, '', textToWrite1)
             textToWrite1 = textToWrite2
-
+    # Format the text as a name
     textToWrite = textToWrite1.capitalize()
 
     text_width, text_height = draw.textsize(textToWrite, font=myFont)
     img_width, img_height = img.size
 
-    if img_width < img_height:
-        position = ((img_height - img_width) // 2, img_height - text_height - 200)
-    else:
-        position = ((img_width - img_height) // 2, img_height - text_height - 200)
+    # if img_width < img_height:
+    #     position = ((img_height - img_width) // 2, img_height - text_height - 200)
+    # else:
 
+    # Calculate the position for bottom center
+    position = ((img_width - img_height) // 2, img_height - text_height - 200)
+
+    # Draw a rectangle in the background of the text
     draw.rectangle(
         [(position[0] - 10, position[1] - 5), (position[0] + text_width + 10, position[1] + text_height + 20)],
         fill='white')
@@ -358,10 +364,6 @@ def writeTitleIntoImage(filename):
     # draw.text((540, 120), textToWrite, font=myFont, fill='gray')
     # draw.text((140, 520), textToWrite, font=myFont, fill='yellow')
 
-
-
-# def configure():
-#     load_dotenv()
 
 def get_first_comment_from_post(post_id):
 
@@ -561,8 +563,8 @@ def main():
                         #DOwnload successful. Now write the file name INTO the IMAGE.
                         #If an exception is thrown, it is caught and we move on to next picture/gif
                         writeTitleIntoImage(FILENAME)
-                        comm = get_first_comment_from_post(comment_url)
-                        writeCommentIntoImage(FILENAME, comm)
+                        # comm = get_first_comment_from_post(comment_url)
+                        # writeCommentIntoImage(FILENAME, comm)
 
                     except Exception as exc:
                         print('    %s' % (exc,))
